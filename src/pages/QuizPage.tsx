@@ -3,8 +3,7 @@ import { ShowProps } from "../interface/interface";
 import { questions } from "./contents/questions";
 import { styled } from "styled-components";
 
-const Wrapper = styled.div<ShowProps>`
-  display: ${(props) => (props.isShow === true ? "flex" : "none")};
+const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: white;
@@ -31,7 +30,7 @@ const Text = styled.div`
   line-height: 50px;
 `;
 
-const QuizPage: FC<ShowProps> = ({ isShow }) => {
+const QuizPage: FC = () => {
   const [questionIdx, setQuestionIdx] = useState(0); // 질문 count
   const [answer, setAnswer] = useState<string[]>([]); // 선택된 문항 배열
   const [isQuizFinished, setIsQuizFinished] = useState(false); // 결과 페이지
@@ -39,9 +38,13 @@ const QuizPage: FC<ShowProps> = ({ isShow }) => {
 
   const currentQuestion = questions[questionIdx]; // 질문 문항
 
+  const handleAnswerClick = () => {
+    setQuestionIdx(questionIdx + 1);
+  };
+
   return (
     <>
-      <Wrapper isShow={isShow}>
+      <Wrapper>
         <Container>
           <Text>
             {currentQuestion.question.split("<br/>").map((word, index) => (
@@ -50,8 +53,12 @@ const QuizPage: FC<ShowProps> = ({ isShow }) => {
           </Text>
         </Container>
 
-        <button>버튼</button>
+        <button onClick={handleAnswerClick}>버튼</button>
       </Wrapper>
+      {currentQuestion.answers.map((answer, index) => {
+        console.log(answer.type);
+        return <p key={index}>{answer.type}</p>;
+      })}
     </>
   );
 };
